@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You ❤️</title>
+  <style>
+    :root{
+      --bg:#0f1724; /* deep navy */
+      --card:#0b1220;
+      --accent:#ff6b81; /* pinkish */
+      --muted:#9aa4b2;
+      --glass: rgba(255,255,255,0.06);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg) 0%, #071226 60%);color:#e6eef6}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+    .card{
+      width:960px;max-width:98%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+      border-radius:18px;padding:28px;box-shadow:0 10px 30px rgba(2,6,23,0.6);position:relative;overflow:hidden;
+      border:1px solid rgba(255,255,255,0.03)
+    }
+
+    header{display:flex;gap:16px;align-items:center}
+    .avatar{width:84px;height:84px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ff9ea3);
+      display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin:6px 0 0}
+
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:18px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr}}
+
+    .main{padding:18px;background:var(--glass);border-radius:12px}
+    .side{padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px}
+
+    .typewriter{font-family: Georgia, 'Times New Roman', serif;font-size:20px;line-height:1.5;min-height:88px}
+    .controls{display:flex;gap:8px;margin-top:12px}
+    button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
+    button.primary{background:linear-gradient(90deg,var(--accent),#ff9ea3);border:none;color:#081126}
+
+    .gallery{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .photo{width:100px;height:72px;border-radius:10px;background:#16313e;background-size:cover;background-position:center;cursor:pointer;flex:0 0 auto}
+
+    .hidden-love{margin-top:12px;padding:12px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      min-height:72px;display:flex;align-items:center;justify-content:center}
+
+    .reveal{font-size:18px;letter-spacing:0.4px}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:right}
+
+    /* Confetti Canvas sits on top */
+    #confetti{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
+
+    /* subtle floating hearts */
+    .heart{position:absolute;opacity:0.08;width:220px;height:220px;filter:blur(12px);transform:rotate(-18deg)}
+
+    /* small helper */
+    .note{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="page">
+      <canvas id="confetti"></canvas>
+      <svg class="heart" viewBox="0 0 32 29" style="right:-40px;top:-30px;">
+        <path fill="url(#g)" d="M23.6 0C20.8 0 18.3 1.4 16 3.8 13.7 1.4 11.2 0 8.4 0 3.8 0 0 3.6 0 8.1 0 15 16 29 16 29s16-14 16-20.9C32 3.6 28.2 0 23.6 0z"/>
+        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff9ea3"/><stop offset="1" stop-color="#ff6b81"/></linearGradient></defs>
+      </svg>
+      <header>
+        <div class="avatar" id="avatar">U</div>
+        <div>
+          <h1 id="title">A little surprise for you</h1>
+          <p class="lead">Click, listen, smile — made just for you.</p>
+        </div>
+      </header>
+
+      <div class="grid">
+        <div class="main">
+          <div class="typewriter" id="typewriter">Press Play</div>
+
+          <div class="controls">
+            <button id="playBtn" class="primary">Play message</button>
+            <button id="revealBtn">Reveal surprise</button>
+            <button id="resetBtn">Reset</button>
+          </div>
+          
+          <div class="note">P.S. I don't know how to put bgm so it doesn't have a music playing in background :'></div>
+        </div>
+
+        <aside class="side">
+          <h3 style="margin:0 0 8px 0">I Miss You So Bad :'<</h3>
+          <div class="gallery" id="gallery">
+            <div class="photo" style="background-image:url('https://i.ibb.co/6RRg91jT/IMG-20250709-203413.jpg');"></div>
+            <div class="photo" style="background-image:url('https://i.ibb.co/fdhXY1gm/IMG-20250720-013043.jpg');"></div>
+            <div class="photo" style="background-image:url('https://i.ibb.co/VYgCXbcy/IMG-20250711-173044.jpg');"></div>
+            <div class="photo" style="background-image:url('https://i.ibb.co/FqJGMPRn/IMG-20250917-024836.jpg');"></div>
+          </div>
+
+          <div class="hidden-love" id="hiddenLove">
+            <div class="reveal" id="revealText">(Hidden message locked)</div>
+          </div>
+
+          <div style="margin-top:12px;text-align:center">
+            <audio id="bgm" loop preload="auto">
+              <source src="" type="audio/mpeg">
+            </audio>
+          </div>
+        </aside>
+      </div>
+
+      <footer>I love you so much mi love, though this is a but a poor coding, I hope you forgive me. —greynorlax</footer>
+    </div>
+  </div>
+
+  <script>
+    // ====== Personalize these variables ======
+    const fromName = "Vivi"; // displayed in avatar (initial)
+    const titleText = "A lil surprise apology for you mi love";
+    const messageLines = [
+      "Hemlo mi love,",
+      "I'm really sorry for falling asleep yesternight as a token of apology here's my peace offering.",
+      "Every day with you is my favorite day. ️💙❤️",
+      "Open the surprise when you're ready "
+    ];
+    const hiddenMessage = "Will you go on a movie date with me tonight? 🌙🎟️"; 
+    const musicURL = "https://files.catbox.moe/ietl03.mp3"; // <-- paste your mp3 link here
+    // =========================================
+
+    // DOM refs
+    const avatar = document.getElementById('avatar');
+    const title = document.getElementById('title');
+    const typeEl = document.getElementById('typewriter');
+    const playBtn = document.getElementById('playBtn');
+    const revealBtn = document.getElementById('revealBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const revealText = document.getElementById('revealText');
+    const bgm = document.getElementById('bgm');
+
+    // init
+    avatar.textContent = fromName[0] || 'U';
+    title.textContent = titleText;
+    if (musicURL) { bgm.querySelector('source').src = musicURL; bgm.load(); }
+
+    // typewriter effect
+    function typeWriter(lines, opts={speed:35}){
+      return new Promise(res => {
+        typeEl.textContent = '';
+        let i=0, lineIndex=0;
+        function nextChar(){
+          if(lineIndex>=lines.length) return res();
+          const line = lines[lineIndex];
+          if(i<line.length){ typeEl.textContent += line[i++]; setTimeout(nextChar, opts.speed); }
+          else{ typeEl.textContent += '\n\n'; i=0; lineIndex++; setTimeout(nextChar, opts.speed*8); }
+        }
+        nextChar();
+      })
+    }
+
+    // Falling red & blue hearts
+    function runConfetti(){
+      const c = document.getElementById('confetti');
+      c.width = c.clientWidth * devicePixelRatio;
+      c.height = c.clientHeight * devicePixelRatio;
+      const ctx = c.getContext('2d');
+      let particles=[];
+      
+      function rand(min,max){return Math.random()*(max-min)+min}
+      
+      // create hearts
+      for(let i=0;i<40;i++){
+        particles.push({
+          x: rand(0,c.width),
+          y: rand(-c.height,0),
+          vx: rand(-0.2,0.2),   
+          vy: rand(0.4,1.2),    
+          rot: rand(0,6.28),
+          vr: rand(-0.01,0.01), 
+          color: Math.random()>0.5 ? "red" : "blue",
+          size: rand(0.6,1.0)   
+        });
+      }
+      
+      function drawHeart(ctx){
+        ctx.beginPath();
+        ctx.moveTo(75, 40);
+        ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+        ctx.bezierCurveTo(20, 25, 20, 62, 20, 62);
+        ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+        ctx.bezierCurveTo(110, 102, 130, 80, 130, 62);
+        ctx.bezierCurveTo(130, 62, 130, 25, 100, 25);
+        ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+        ctx.closePath();
+      }
+      
+      function animate(){
+        ctx.clearRect(0,0,c.width,c.height);
+        for(let p of particles){
+          p.x += p.vx + Math.sin(p.y/50)*0.2; 
+          p.y += p.vy;
+          p.rot += p.vr;
+          if(p.y>c.height+50){ p.y=-50; p.x=rand(0,c.width); }
+          
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.scale(2*p.size, 2*p.size);
+          ctx.fillStyle = p.color;
+          drawHeart(ctx);
+          ctx.fill();
+          ctx.restore();
+        }
+        requestAnimationFrame(animate);
+      }
+      
+      animate();
+    }
+
+    // play sequence
+    playBtn.addEventListener('click', async ()=>{
+      playBtn.disabled = true; playBtn.textContent = 'Playing...'
+      if(bgm && bgm.src) try{ await bgm.play(); }catch(e){}
+      await typeWriter(messageLines,{speed:38});
+      playBtn.textContent = 'Played'; playBtn.classList.remove('primary');
+    });
+
+    revealBtn.addEventListener('click', ()=>{
+      revealText.textContent = hiddenMessage;
+      runConfetti();
+      revealText.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:800,iterations:2});
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      typeEl.textContent = 'Press Play';
+      revealText.textContent = '(Hidden message locked)';
+      if(bgm && !bgm.paused) bgm.pause();
+      playBtn.disabled = false; playBtn.textContent = 'Play message'; playBtn.classList.add('primary');
+    });
+
+    // photo click — open in new tab
+    document.getElementById('gallery').addEventListener('click', e=>{
+      const p = e.target.closest('.photo'); 
+      if(!p) return; 
+      const url = p.dataset.full || p.style.backgroundImage.slice(5,-2);
+      window.open(url, '_blank');
+    });
+
+    // floating heart subtle opacity animation
+    (function floatHearts(){
+      const heart = document.querySelector('.heart'); 
+      let dir=0; 
+      setInterval(()=>{ dir = (dir+1)%2; heart.style.opacity = (dir?0.06:0.03); }, 2200);
+    })();
+
+    // accessibility: keyboard shortcuts
+    document.addEventListener('keydown', e=>{ 
+      if(e.key==='r' || e.key==='R') revealBtn.click(); 
+      if(e.key==='p' || e.key==='P') playBtn.click(); 
+    })
+  </script>
+</body>
+</html>
